@@ -1,0 +1,54 @@
+FROM aarch64/ubuntu
+
+ENV KIBANA_VERSION 5.6
+ENV NODE_VERSION 8.9.0
+
+RUN set -x \
+	\
+	&& groupadd elk\
+	&& useradd -g elk elk
+
+### Install git
+RUN set -x \
+ && apt-get update && apt-get install -y \
+    git \
+    wget \
+    python \
+    build-essential \
+ && rm -rf /var/lib/apt/lists/* 
+
+### Install node and npm
+ENV NODE_HOME /opt/node
+#RUN curl -SL https://nodejs.org/download/release/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-arm64.tar.xz \
+#    | tar -xJC /opt/
+RUN wget https://nodejs.org/download/release/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-arm64.tar.gz \
+ && tar -xzf ./node-v${NODE_VERSION}-linux-arm64.tar.gz \
+ && mv node-v${NODE_VERSION}-linux-arm64 ${NODE_HOME} \
+ && rm ./node-v${NODE_VERSION}-linux-arm64.tar.gz
+RUN chown -R root:root ${NODE_HOME}
+
+ENV PATH "${NODE_HOME}/bin:${PATH}"
+
+### Fetch Kibana and switch branch to 5.6
+ENV KIBANA_HOME /opt/kibana
+
+WORKDIR /opt
+RUN git clone https://github.com/elastic/kibana.git
+
+WORKDIR ${KIBANA_HOME} 
+RUN git checkout -b ${KIBANA_VERSION} -t origin/${KIBANA_VERSION}
+
+### Compile Kibana
+RUN ["/bin/bash", "-c", "npm install"]
+
+### Update configuration file
+ADD ./kibana.yml ${KIBANA_HOME}/config/kibana.yml
+
+### Preheat
+COPY kibana-entrypoint.sh /
+
+EXPOSE 5601
+ENTRYPOINT ["/kibana-entrypoint.sh"]
+
+### Start Kibana
+CMD ["/bin/bash", "-c", "npm start"]
