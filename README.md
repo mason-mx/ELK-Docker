@@ -23,6 +23,7 @@ Since it is JAVA-based code, JDK is the most essential component to run it. To c
 Open a new shell window and run Elasticsearch.
 ```
 <path_to_elasticsearch_root_dir>/bin/elasticsearch 
+```
 
 Elasticsearch should now be running on port 9200. 
 
@@ -34,6 +35,7 @@ To test, point your browser at port 9200 (http://localhost:9200). You should see
   "cluster_name" : "elasticsearch",
      ... truncated output 
 }
+```
 
 Or run 'curl -X GET 'http://localhost:9200''. You should see the following response:
 ```
@@ -50,6 +52,7 @@ Or run 'curl -X GET 'http://localhost:9200''. You should see the following respo
   },
   "tagline" : "You Know, for Search"
 }
+```
 
 ### Kibana 5.6
 
@@ -71,11 +74,13 @@ As there is no existing binary package for ARM64 platform, node tool and the fur
 If you're just getting started with 'elasticsearch', you could use the following command to populate your instance with a few fake logs to hit the ground running.
 ```
 node scripts/makelogs
+```
 >Make sure to execute node scripts/makelogs after elasticsearch is up and running!
 
 Start the development server.
 ```
 npm start
+```
 >On Windows, you'll need you use Git Bash, Cygwin, or a similar shell that exposes the sh command. And to successfully build you'll need Cygwin optional packages zip, tar, and shasum.
 
 Kibana should now be running on port 5601. To test, point your web browser at port 5601 ('https://IPAddress/localhost:5601'). You should see the Kibana UI.
