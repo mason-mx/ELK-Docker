@@ -1,6 +1,6 @@
 # Instructions for Docker
 
-Here are the instructions to build and run images, which requires much different scripts and commands from x86.
+Here are the instructions to build and run images.
 
 ## Build
 
@@ -19,7 +19,7 @@ Open a new shell window and creat a new sub-net for Docker.
 ```
 docker network create <network-name>
 ```
-Then run Elasticsearch.
+Then run ElasticSearch.
 ```
 docker run -ti --rm -p 9200:9200 --net=elk --name es5 arm64/es5
 ```

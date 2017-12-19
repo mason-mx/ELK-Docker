@@ -10,12 +10,12 @@ Before 6.x, 5.6.x is the latest version for ELK, which are able to be obtained f
 
 #### Prerequisites
 
-Since it is JAVA-based code, JDK is the most essential component to run it. To check your Java version, run the following command: 'java -version'.
+Since it is JAVA-based code, JDK is the most essential component to run it. To check your Java version, run the following command: `java -version`.
 
 #### Installing
 
 * Download the [past releases](https://www.elastic.co/downloads/past-releases)
-* Extract the '.zip' or 'tar.gz' archive file
+* Extract the `.zip` or `tar.gz` archive file
 * Change the ownership of the folder
 
 #### Running and test
@@ -62,16 +62,16 @@ As there is no existing binary package for ARM64 platform, node tool and the fur
 
 #### Installing
 
-* Download node for [ARM64 binary package](https://nodejs.org/download/release/v8.9.0/node-v8.9.0-linux-arm64.tar.gz)
-* Extract the '.zip' or 'tar.gz' archive file
-* Add node/npm to be envirement variables by export <path_to_node_root_dir>/bin to 'PATH'
+* Download [node binary package for ARM64](https://nodejs.org/download/release/v8.9.0/node-v8.9.0-linux-arm64.tar.gz)
+* Extract the `tar.gz` archive file
+* Add node/npm to be envirement variables by export <path_to_node_root_dir>/bin to `PATH`
 * Fork, then clone the [kibana repo](https://github.com/elastic/kibana.git) and change directory into it
 * Switch to branch 5.6
-* Install 'npm' dependencies
+* Install `npm` dependencies
 
 #### Running and test
 
-If you're just getting started with 'elasticsearch', you could use the following command to populate your instance with a few fake logs to hit the ground running.
+If you're just getting started with `elasticsearch`, you could use the following command to populate your instance with a few fake logs to hit the ground running.
 ```
 node scripts/makelogs
 ```
@@ -83,4 +83,4 @@ npm start
 ```
 >On Windows, you'll need you use Git Bash, Cygwin, or a similar shell that exposes the sh command. And to successfully build you'll need Cygwin optional packages zip, tar, and shasum.
 
-Kibana should now be running on port 5601. To test, point your web browser at port 5601 ('https://IPAddress/localhost:5601'). You should see the Kibana UI.
+Kibana should now be running on port 5601. To test, point your web browser at port 5601 (https://IPAddress/localhost:5601). You should see the Kibana UI.
