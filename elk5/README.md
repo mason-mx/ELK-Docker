@@ -6,11 +6,15 @@ Here are the instructions to build and run images.
 
 Build ElasticSearch image.
 ```
-docker build -t arm64/es5 -f /path/to/a/Dockerfile-es .
+docker build -t arm64/elk-es5.6.5 -f /path/to/a/Dockerfile-es .
+```
+Build Filebeat image.
+```
+docker build -t arm64/filebeat5.6.5 -f /path/to/a/Dockerfile-filebeat .
 ```
 Build Kibana image.
 ```
-docker build -t arm64/k5 -f /path/to/a/Dockerfile-k .
+docker build -t arm64/elk-k5.6.5 -f /path/to/a/Dockerfile-k .
 ```
 
 ## Running
@@ -21,11 +25,15 @@ docker network create <network-name>
 ```
 Then run ElasticSearch.
 ```
-docker run -ti --rm -p 9200:9200 --net=elk --name es5 arm64/es5
+docker run -ti --rm -p 9200:9200 --net=elk --name es5 arm64/elk-es5.6.5
+```
+Open a new shell window and then run Filebeat and input the host IP address.
+```
+docker run -ti --rm arm64/filebeat5.6.5
 ```
 Open a new shell window and then run Kibana.
 ```
-docker run -ti --rm -p 5601:5601 --net=elk --name k5 arm64/k5
+docker run -ti --rm -p 5601:5601 --net=elk --name k5 arm64/elk-k5.6.5
 ```
 
 ## Test
