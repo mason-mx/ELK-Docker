@@ -1,0 +1,62 @@
+FROM aarch64/ubuntu
+
+ENV FILEBEAT_VERSION 6.0.1
+ENV GO_VERSION 1.9.2
+
+### Install git, wget and make
+RUN set -x \
+ && apt-get update && apt-get install -y \
+    git \
+    curl \
+    wget \
+    build-essential \
+ && rm -rf /var/lib/apt/lists/* 
+
+### Download Example Files
+RUN mkdir earthquakes
+WORKDIR /earthquakes
+RUN wget https://raw.githubusercontent.com/elastic/examples/master/Exploring%20Public%20Datasets/earthquakes/ncedc-earthquakes-dataset.tar.gz \
+ && wget https://raw.githubusercontent.com/elastic/examples/master/Exploring%20Public%20Datasets/earthquakes/ncedc-earthquakes-template.json \
+ && wget https://raw.githubusercontent.com/elastic/examples/master/Exploring%20Public%20Datasets/earthquakes/ncedc-earthquakes-pipeline.json \
+ && wget https://raw.githubusercontent.com/elastic/examples/master/Exploring%20Public%20Datasets/earthquakes/ncedc-earthquakes-dashboards.json \
+ && wget https://raw.githubusercontent.com/elastic/examples/master/Exploring%20Public%20Datasets/earthquakes/ncedc-earthquakes-filebeat.yml
+
+### Ingest Data
+RUN tar -zxf ncedc-earthquakes-dataset.tar.gz
+
+### Install go
+WORKDIR /
+ENV GOROOT /opt/go
+RUN wget https://redirector.gvt1.com/edgedl/go/go${GO_VERSION}.linux-arm64.tar.gz \
+ && tar -xzf ./go${GO_VERSION}.linux-arm64.tar.gz \
+ && mv go ${GOROOT} \
+ && rm ./go${GO_VERSION}.linux-arm64.tar.gz
+
+ENV PATH "${GOROOT}/bin:${PATH}"
+
+### Fetch Filebeat and switch a certain branch
+RUN mkdir goprojects
+ENV GOPATH /goprojects
+
+RUN ["/bin/bash", "-c", "go get github.com/elastic/beats/filebeat"]
+
+WORKDIR ${GOPATH}/src/github.com/elastic/beats/filebeat
+
+RUN ["/bin/bash", "-c", "go get"]
+RUN ["/bin/bash", "-c", "git checkout v${FILEBEAT_VERSION}"]
+
+### Compile Filebeat
+RUN ["/bin/bash", "-c", "make"]
+
+### Update configuration file
+ADD ./ncedc-earthquakes-filebeat.yml ./ncedc-earthquakes-filebeat.yml
+
+### Prepare to feed data
+RUN rm -rf data/ \
+ && chmod go-w ./filebeat.yml
+
+COPY filebeat-entrypoint.sh /
+ENTRYPOINT ["/filebeat-entrypoint.sh"]
+
+### Start to feed
+CMD ["/bin/bash", "-c", "./filebeat -e -c ncedc-earthquakes-filebeat.yml"]
