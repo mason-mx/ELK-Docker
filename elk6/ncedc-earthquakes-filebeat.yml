@@ -14,7 +14,7 @@ filebeat.prospectors:
     type: blast
 
 output.elasticsearch:
-  hosts: ["10.21.5.111:9200"]
+  hosts: ["localhost:9200"]
   index: "ncedc-earthquakes"
   pipeline: ncedc-earthquakes
   indices:
