@@ -25,7 +25,7 @@ docker network create <network-name>
 ```
 Then run ElasticSearch.
 ```
-docker run -ti --rm -p 9200:9200 --net=`elk5` --name es5 arm64/elk-es5.6.5
+docker run -ti --rm -p 9200:9200 --net=elk5 --name es5 arm64/elk-es5.6.5
 ```
 Open a new shell window and then run Filebeat and input the host IP address.
 ```
@@ -33,7 +33,7 @@ docker run -ti --rm arm64/filebeat5.6.5
 ```
 Open a new shell window and then run Kibana.
 ```
-docker run -ti --rm -p 5601:5601 --net=`elk5` --name k5 arm64/elk-k5.6.5
+docker run -ti --rm -p 5601:5601 --net=elk5 --name k5 arm64/elk-k5.6.5
 ```
 
 ## Test
