@@ -21,19 +21,19 @@ docker build -t arm64/elk-k6.0.1 -f /path/to/a/Dockerfile-k .
 
 Open a new shell window and creat a new sub-net for Docker.
 ```
-docker network create <network-name> in this case named **elk6**
+docker network create <network-name> in this case named elk6
 ```
 Then run ElasticSearch.
 ```
-docker run -ti --rm -p 9200:9200 --net=**elk6** --name es6 arm64/elk-es6.0.1
+docker run -ti --rm -p 9200:9200 --net=elk6 --name es6 arm64/elk-es6.0.1
 ```
 Open a new shell window and then run Filebeat and input the host IP address.
 ```
-docker run -ti --rm arm64/filebeat6.0.1
+docker run -ti --rm --net=elk6 arm64/filebeat6.0.1
 ```
 Open a new shell window and then run Kibana.
 ```
-docker run -ti --rm -p 5601:5601 --net=**elk6** --name k6 arm64/elk-k6.0.1
+docker run -ti --rm -p 5601:5601 --net=elk6 --name k6 arm64/elk-k6.0.1
 ```
 
 ## Test
@@ -68,6 +68,7 @@ Error
 ```
 * There are many JAVA exceptions when feeding data to es6.0.1
 ```
+[2017-12-25T10:00:32,651][DEBUG][o.e.a.b.TransportShardBulkAction] [ncedc-earthquakes-earthquake][0] failed to execute bulk item (index) BulkShardRequest [[ncedc-earthquakes-earthquake][0]] containing [40] requests
 org.elasticsearch.index.mapper.MapperParsingException: failed to parse
         at org.elasticsearch.index.mapper.DocumentParser.wrapInMapperParsingException(DocumentParser.java:175) ~[elasticsearch-6.0.1.jar:6.0.1]
         at org.elasticsearch.index.mapper.DocumentParser.parseDocument(DocumentParser.java:70) ~[elasticsearch-6.0.1.jar:6.0.1]
@@ -167,10 +168,13 @@ Caused by: java.lang.NumberFormatException: empty String
         at org.elasticsearch.index.mapper.DocumentParser.internalParseDocument(DocumentParser.java:93) ~[elasticsearch-6.0.1.jar:6.0.1]
         at org.elasticsearch.index.mapper.DocumentParser.parseDocument(DocumentParser.java:67) ~[elasticsearch-6.0.1.jar:6.0.1]
         ... 32 more
+[2017-12-25T10:00:32,688][INFO ][o.e.c.m.MetaDataMappingService] [DGOfSCF] [ncedc-earthquakes-earthquake/od3WQoUFQUebacYULFkyPg] update_mapping [doc]
+[2017-12-25T10:00:32,697][INFO ][o.e.c.m.MetaDataMappingService] [DGOfSCF] [ncedc-earthquakes-blast/caERYQyyRiuaMi0uvoDFNQ] update_mapping [doc]
 ```
 
 ## Things to try
 
-- [ ] to start a Filebeat container in the same subnet and feed data to `es6`
+- [x] to start a Filebeat container in the same subnet and feed data to `es6`.
+- [ ] to update `filebeat-entry.sh` to automatically check if feeding ends
 - [ ] to run elk6 on x86 machine to check the above issue of showing map
 
