@@ -59,4 +59,4 @@ COPY filebeat-entrypoint.sh /
 ENTRYPOINT ["/filebeat-entrypoint.sh"]
 
 ### Start to feed
-CMD ["/bin/bash", "-c", "./filebeat -e -c ncedc-earthquakes-filebeat.yml"]
+#CMD ["/bin/bash", "-c", "./filebeat -e -c ncedc-earthquakes-filebeat.yml"]

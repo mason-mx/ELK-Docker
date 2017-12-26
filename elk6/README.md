@@ -175,6 +175,6 @@ Caused by: java.lang.NumberFormatException: empty String
 ## Things to try
 
 - [x] to start a Filebeat container in the same subnet and feed data to `es6`.
-- [ ] to update `filebeat-entry.sh` to automatically check if feeding ends
+- [x] to update `filebeat-entry.sh` to automatically check if feeding ends
 - [ ] to run elk6 on x86 machine to check the above issue of showing map
 
