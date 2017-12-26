@@ -4,8 +4,6 @@
 curl -XPUT -H 'Content-Type: application/json' 'es6:9200/_ingest/pipeline/ncedc-earthquakes' -d @/earthquakes/ncedc-earthquakes-pipeline.json
 curl -XPUT -H 'Content-Type: application/json' 'es6:9200/_template/ncedc-earthquakes' -d @/earthquakes/ncedc-earthquakes-template.json
 
-./filebeat -e -c ncedc-earthquakes-filebeat.yml &
-
 set -e
 
 # Add elasticsearch as command if needed
