@@ -42,7 +42,7 @@ Please read [README.md](https://github.com/mason-mx/ELK-Docker/blob/master/READM
 
 ## Known Issues
 
-* There is no map showing on the page of any case in dashboard.
+* [fixed]There is no map showing on the page of any case in dashboard.
 
 The warning message displayed on the top of the page is:
 > Coordinate Map: Could not retrieve manifest from the tile service: status -1
@@ -176,5 +176,5 @@ Caused by: java.lang.NumberFormatException: empty String
 
 - [x] to start a Filebeat container in the same subnet and feed data to `es6`.
 - [x] to update `filebeat-entry.sh` to automatically check if feeding ends
-- [ ] to run elk6 on x86 machine to check the above issue of showing map
+- [x] to run elk6 on x86 machine to check the above issue of showing map
 
