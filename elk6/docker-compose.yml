@@ -1,0 +1,40 @@
+version: "3"
+services:
+  es6:
+    # replace username/repo:tag with your name and image details
+    image: arm64/elk-es6.0.1 
+    deploy:
+      restart_policy:
+        condition: on-failure
+      #resources:
+        #limits:
+        #  cpus: "0.1"
+        #  memory: 50M
+    ports:
+      - "9200:9200"
+    networks:
+      - elknet
+  filebeat6:
+    image: arm64/filebeat6.0.1
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+    depends_on:
+      - "es6"
+    command: ["/wait-for-it.sh", "es6:9200", "--", "/filebeat-entrypoint.sh"]
+    networks:
+      - elknet
+  k6:
+    image: arm64/elk-k6.0.1
+    ports:
+      - "5601:5601"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+    depends_on:
+      - "es6"
+    command: ["/wait-for-it.sh", "es6:9200", "--", "/kibana-entrypoint.sh"]
+    networks:
+      - elknet
+networks:
+  elknet:

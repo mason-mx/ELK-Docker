@@ -13,6 +13,7 @@ RUN set -x \
  && apt-get update && apt-get install -y \
     git \
     wget \
+    curl \
     python \
     build-essential \
  && rm -rf /var/lib/apt/lists/* 
@@ -46,9 +47,10 @@ ADD ./kibana.yml ${KIBANA_HOME}/config/kibana.yml
 
 ### Preheat
 COPY kibana-entrypoint.sh /
+COPY wait-for-it.sh /
 
 EXPOSE 5601
-ENTRYPOINT ["/kibana-entrypoint.sh"]
+#ENTRYPOINT ["/kibana-entrypoint.sh"]
 
 ### Start Kibana
-CMD ["./bin/kibana"]
+CMD ["/kibana-entrypoint.sh"]

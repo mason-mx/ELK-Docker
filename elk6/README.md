@@ -19,6 +19,8 @@ docker build -t arm64/elk-k6.0.1 -f /path/to/a/Dockerfile-k .
 
 ## Running
 
+### Load these application separately
+
 Open a new shell window and creat a new sub-net for Docker.
 ```
 docker network create <network-name> in this case named elk6
@@ -34,6 +36,51 @@ docker run -ti --rm --net=elk6 arm64/filebeat6.0.1
 Open a new shell window and then run Kibana.
 ```
 docker run -ti --rm -p 5601:5601 --net=elk6 --name k6 arm64/elk-k6.0.1
+```
+### Compose up
+
+Open a new shell window and run the service.
+```
+docker-compose up
+```
+
+## External source
+
+* wrapper scripts
+> Use a tool such as [wait-for-it.sh](https://github.com/vishnubob/wait-for-it), [dockerize](https://github.com/jwilder/dockerize), or sh-compatible [wait-for](https://github.com/Eficode/wait-for). These are small wrapper scripts which you can include in your application’s image and will poll a given host and port until it’s accepting TCP connections.
+
+* [Docker-compose 1.18.0](https://github.com/docker/compose/releases)
+```
+wget https://github.com/docker/compose/archive/1.18.0.tar.gz
+tar -xvf 1.18.0.tar.gz
+cd compose-1.18.0
+cp Dockerfile.armhf Dockerfile.arm64v8
+```
+Replace in Dockerfile.arm64v8
+```
+    rm -rf /var/lib/apt/lists/*
+RUN curl https://get.docker.com/builds/Linux/armel/docker-1.8.3 \
+       -o /usr/local/bin/docker && \
+    chmod +x /usr/local/bin/docker
+```
+with
+```
+RUN apt-get download docker.io && \
+    dpkg --force-depends -i docker*.deb && \
+    rm docker*.deb && \
+    rm -rf /var/lib/apt/lists/*
+```
+Or just use the Dockerfile in [this repository](https://github.com/devcomb/dockerfiles/blob/master/compose-arm64/Dockerfile.arm64v8) to build a Docker image.
+
+INSTALL AS A CONTAINER
+> Compose can also be run inside a container, from a small bash script wrapper. To install compose as a container run this command. Be sure to replace the version number with the one that you want, if this example is out-of-date:
+```
+$ sudo curl -L --fail https://github.com/docker/compose/releases/download/1.18.0/run.sh -o /usr/bin/docker-compose
+$ sudo chmod +x /usr/bin/docker-compose
+```
+Change the image name to the one built above:
+```
+IMAGE="docker/arm64v8-compose:1.18.0"
 ```
 
 ## Test
@@ -174,7 +221,9 @@ Caused by: java.lang.NumberFormatException: empty String
 
 ## Things to try
 
-- [x] to start a Filebeat container in the same subnet and feed data to `es6`.
+- [x] to start a Filebeat container in the same subnet and feed data to `es6`
 - [x] to update `filebeat-entry.sh` to automatically check if feeding ends
 - [x] to run elk6 on x86 machine to check the above issue of showing map
+- [x] to organize these applications by a service
+- [ ] to migrate earthquakes data to host volume
 
