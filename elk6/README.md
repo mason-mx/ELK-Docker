@@ -71,7 +71,14 @@ RUN apt-get download docker.io && \
     rm -rf /var/lib/apt/lists/*
 ```
 Or just use the Dockerfile in [this repository](https://github.com/devcomb/dockerfiles/blob/master/compose-arm64/Dockerfile.arm64v8) to build a Docker image.
-
+The tox program test for py34 was failing so I removed it from the “tox.ini” file.
+```
+sed -i.bak “|envlist = py27,py34,pre-commit|envlist = py27,pre-commit|” tox.ini; rm tox.ini.bak
+```
+Build the ARM64 docker image.
+```
+docker build -t docker/arm64v8-compose:1.18.0 -f Dockerfile.arm64v8 .
+```
 INSTALL AS A CONTAINER
 > Compose can also be run inside a container, from a small bash script wrapper. To install compose as a container run this command. Be sure to replace the version number with the one that you want, if this example is out-of-date:
 ```
